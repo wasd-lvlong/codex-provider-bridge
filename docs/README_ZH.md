@@ -5,7 +5,7 @@
 ### 切换 provider 后，让 Codex 历史会话重新可见
 
 [![CI](https://github.com/Dailin521/codex-provider-sync/actions/workflows/ci.yml/badge.svg)](https://github.com/Dailin521/codex-provider-sync/actions/workflows/ci.yml)
-[![Platform](https://img.shields.io/badge/platform-Windows-lightgrey.svg)](https://github.com/Dailin521/codex-provider-sync)
+[![Platform](https://img.shields.io/badge/platform-Windows%20%7C%20macOS-lightgrey.svg)](https://github.com/Dailin521/codex-provider-sync)
 [![Node](https://img.shields.io/badge/node-24%2B-brightgreen.svg)](https://nodejs.org/)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](../LICENSE)
 
@@ -49,6 +49,7 @@ codex-provider status
 codex-provider sync
 codex-provider sync --provider openai
 codex-provider switch apigather
+codex-provider install-macos-launch-agent
 codex-provider restore C:\Users\you\.codex\backups_state\provider-sync\<timestamp>
 codex-provider prune-backups --keep 5
 ```
@@ -58,8 +59,26 @@ codex-provider prune-backups --keep 5
 - `status`：只检查当前 provider、rollout、SQLite、项目可见性诊断。
 - `sync`：不切换登录状态，只把历史会话 metadata 同步到当前 provider。
 - `switch <provider-id>`：修改 `config.toml` 根级 `model_provider`，然后执行同步。
+- `install-macos-launch-agent`：在 macOS 安装 `launchd` 自动监听器，切换 provider 后自动同步历史到当前 provider。
 - `restore <backup-dir>`：从备份恢复，支持 `--no-config`、`--no-db`、`--no-sessions`。
 - `prune-backups --keep <n>`：只清理本工具创建的旧备份。
+
+## 重要边界
+
+`codex-provider-sync` 一次只会把历史会话 metadata 同步到一个目标 provider，不是让多个 provider 同时共享显示。
+
+例如：
+
+- 你同步到 `oneapi` 后，会在 `oneapi` 下看到历史。
+- 之后切回官方订阅 `openai`，如果没有再同步到 `openai`，订阅侧可能就看不到这些历史。
+
+如果你的需求是“切换 provider 时自动把历史翻到当前 provider”，macOS 可以安装：
+
+```bash
+codex-provider install-macos-launch-agent
+```
+
+它会监听 `~/.codex/config.toml`，在根 `model_provider` 变化时自动执行一次同步。
 
 ## 能力边界
 
@@ -96,6 +115,7 @@ codex-provider prune-backups --keep 5
 - 如果 `state_5.sqlite` 被占用，关闭 Codex / Codex App / app-server 后重试。
 - 如果 `state_5.sqlite` 损坏，工具会提示 malformed/unreadable 并停止同步。
 - 如果活跃会话锁住 rollout 文件，工具会跳过该文件并继续处理其它历史会话。
+- macOS 自动监听器只负责历史 metadata 自动同步，不处理登录、认证、官方订阅保活或第三方切换工具本身。
 - 如果 EXE 双击无反应，先确认已解压，再查看 `%AppData%\codex-provider-sync\startup-error.log`，或在 PowerShell 里运行 `./CodexProviderSync.exe`。
 
 GUI 说明见 [README_GUI_ZH.md](README_GUI_ZH.md)。AI / Agent 说明见 [AGENTS.md](../AGENTS.md)。

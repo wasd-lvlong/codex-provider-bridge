@@ -5,7 +5,7 @@
 ### Keep Codex history visible after switching between providers
 
 [![CI](https://github.com/Dailin521/codex-provider-sync/actions/workflows/ci.yml/badge.svg)](https://github.com/Dailin521/codex-provider-sync/actions/workflows/ci.yml)
-[![Platform](https://img.shields.io/badge/platform-Windows-lightgrey.svg)](https://github.com/Dailin521/codex-provider-sync)
+[![Platform](https://img.shields.io/badge/platform-Windows%20%7C%20macOS-lightgrey.svg)](https://github.com/Dailin521/codex-provider-sync)
 [![Node](https://img.shields.io/badge/node-24%2B-brightgreen.svg)](https://nodejs.org/)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](../LICENSE)
 [![Community](https://img.shields.io/badge/community-LINUX%20DO-2ea043.svg)](https://linux.do/)
@@ -101,6 +101,12 @@ Install a Windows double-click launcher (placed on your Desktop by default):
 codex-provider install-windows-launcher
 ```
 
+Install a macOS `launchd` watcher that auto-syncs after provider changes:
+
+```bash
+codex-provider install-macos-launch-agent
+```
+
 Rollback from a backup:
 
 ```bash
@@ -145,6 +151,7 @@ Quick mapping:
 - fix visibility under current provider: `codex-provider sync`
 - switch provider and sync: `codex-provider switch openai`
 - install a desktop double-click launcher: `codex-provider install-windows-launcher`
+- install a macOS watcher that follows provider switches: `codex-provider install-macos-launch-agent`
 - roll back a mistake: `codex-provider restore <backup-dir>`
 
 ## Commands
@@ -170,6 +177,22 @@ Quick mapping:
   - `Codex Provider Sync.cmd`: visible console version for troubleshooting
   - use `--dir <path>` to choose another install directory
   - use `--codex-home <path>` to bake a fixed `CODEX_HOME` into the launcher
+- `codex-provider install-macos-launch-agent`
+  - creates a `launchd` plist and an auto-sync shell script
+  - watches `~/.codex/config.toml` for root `model_provider` changes
+  - when the provider changes, runs `codex-provider sync --provider <current-provider>`
+  - use `--launch-agents-dir <path>` and `--support-dir <path>` to change output paths
+  - use `--node-path <path>` or `--cli-path <path>` when you want to pin a specific runtime or script location
+
+## Important Limitation
+
+This tool synchronizes history metadata to one target provider at a time. It does not make multiple providers show the same history simultaneously.
+
+That means:
+
+- after syncing to `oneapi`, history becomes visible under `oneapi`
+- after switching back to `openai`, history may disappear there until you sync to `openai` again
+- if you want that flip to happen automatically on macOS, install `codex-provider install-macos-launch-agent`
 
 ```bash
 codex-provider status
@@ -180,6 +203,7 @@ codex-provider switch openai
 codex-provider switch apigather
 codex-provider prune-backups --keep 5
 codex-provider install-windows-launcher
+codex-provider install-macos-launch-agent
 codex-provider install-windows-launcher --dir D:\Tools
 codex-provider install-windows-launcher --codex-home C:\Users\you\.codex
 codex-provider restore C:\Users\you\.codex\backups_state\provider-sync\20260319T042708906Z
@@ -209,6 +233,7 @@ It also uses:
 - It keeps the newest 5 managed backups by default; GUI retention settings or CLI `--keep <n>` can override that.
 - Manual cleanup and auto-prune only touch backups created by this tool inside `backups_state/provider-sync`.
 - `Codex Provider Sync.vbs` assumes the `codex-provider` command is already available.
+- The macOS launch agent only automates metadata sync after provider switches; it does not manage auth state or third-party switch tools.
 - If `state_5.sqlite` is in use, close Codex / Codex App / app-server and retry.
 - If `state_5.sqlite` is malformed, the tool reports it as malformed/unreadable and blocks sync; back up, repair, or remove the damaged database before retrying.
 - If a live session keeps one rollout file open, `sync` skips that file and reports it. Rerun later.

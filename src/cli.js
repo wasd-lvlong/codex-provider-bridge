@@ -3,7 +3,7 @@
 import path from "node:path";
 
 import { DEFAULT_BACKUP_RETENTION_COUNT } from "./constants.js";
-import { installWindowsLauncher } from "./launcher.js";
+import { installMacosLaunchAgent, installWindowsLauncher } from "./launcher.js";
 import { assertSupportedNodeVersion } from "./node-version.js";
 
 async function loadService() {
@@ -21,6 +21,7 @@ Usage:
   codex-provider prune-backups [--keep N] [--codex-home PATH]
   codex-provider restore <backup-dir> [--no-config] [--no-db] [--no-sessions] [--codex-home PATH]
   codex-provider install-windows-launcher [--dir PATH] [--codex-home PATH]
+  codex-provider install-macos-launch-agent [--launch-agents-dir PATH] [--support-dir PATH] [--label NAME] [--node-path PATH] [--cli-path PATH] [--codex-home PATH]
 `);
 }
 
@@ -255,6 +256,28 @@ async function main() {
     } else {
       console.log("  CODEX_HOME: default current environment / ~/.codex");
     }
+    return;
+  }
+
+  if (command === "install-macos-launch-agent") {
+    const result = await installMacosLaunchAgent({
+      launchAgentsDir: flags["launch-agents-dir"],
+      supportDir: flags["support-dir"],
+      codexHome: flags["codex-home"],
+      label: flags.label,
+      nodePath: flags["node-path"],
+      cliPath: flags["cli-path"]
+    });
+    console.log("Installed macOS launch agent files:");
+    console.log(`  Label: ${result.label}`);
+    console.log(`  LaunchAgent plist: ${result.plistPath}`);
+    console.log(`  Auto-sync script: ${result.scriptPath}`);
+    console.log(`  Codex home: ${result.codexHome}`);
+    console.log(`  Stdout log: ${result.stdoutPath}`);
+    console.log(`  Stderr log: ${result.stderrPath}`);
+    console.log("Next steps:");
+    console.log(`  Load: ${result.loadCommand}`);
+    console.log(`  Reload: ${result.unloadCommand} && ${result.loadCommand}`);
     return;
   }
 
