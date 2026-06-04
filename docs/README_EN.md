@@ -1,11 +1,11 @@
 <div align="center">
 
-# codex-provider-sync
+# codex-provider-bridge
 
 ### Keep Codex history visible after switching between providers
 
-[![CI](https://github.com/wasd-lvlong/codex-provider-sync/actions/workflows/ci.yml/badge.svg)](https://github.com/wasd-lvlong/codex-provider-sync/actions/workflows/ci.yml)
-[![Platform](https://img.shields.io/badge/platform-Windows%20%7C%20macOS-lightgrey.svg)](https://github.com/wasd-lvlong/codex-provider-sync)
+[![CI](https://github.com/wasd-lvlong/codex-provider-bridge/actions/workflows/ci.yml/badge.svg)](https://github.com/wasd-lvlong/codex-provider-bridge/actions/workflows/ci.yml)
+[![Platform](https://img.shields.io/badge/platform-Windows%20%7C%20macOS-lightgrey.svg)](https://github.com/wasd-lvlong/codex-provider-bridge)
 [![Node](https://img.shields.io/badge/node-24%2B-brightgreen.svg)](https://nodejs.org/)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](../LICENSE)
 
@@ -23,14 +23,14 @@ Typical symptom:
 - then disappear after switching to another provider
 - `codex resume` and Codex App may disagree because session metadata is stored in both rollout files and SQLite
 
-`codex-provider-sync` fixes that by updating both:
+`codex-provider-bridge` fixes that by updating both:
 
 - `~/.codex/sessions` and `~/.codex/archived_sessions`
 - `~/.codex/state_5.sqlite`
 
 ## GUI For Windows
 
-If you want a normal Windows app instead of Node/npm, download `CodexProviderSync.exe` from Releases.
+If you want a normal Windows app instead of Node/npm, download `CodexProviderBridge.exe` from Releases.
 
 The GUI app:
 
@@ -47,7 +47,7 @@ For GUI-specific usage notes, see [README_GUI_ZH.md](README_GUI_ZH.md).
 ## Install
 
 ```bash
-npm install -g git+https://github.com/wasd-lvlong/codex-provider-sync.git
+npm install -g git+https://github.com/wasd-lvlong/codex-provider-bridge.git
 ```
 
 Requirements:
@@ -63,7 +63,7 @@ For end users, the GUI EXE is the recommended path. The npm CLI remains availabl
 
 GUI:
 
-- download `CodexProviderSync.exe` from Releases
+- download `CodexProviderBridge.exe` from Releases
 - open it and click `Refresh`
 - choose the target provider
 - click `Execute`
@@ -71,51 +71,51 @@ GUI:
 If you already switched auth/provider using your usual method:
 
 ```bash
-codex-provider sync
+codex-bridge sync
 ```
 
 If you want to change the root `model_provider` and sync history in one step:
 
 ```bash
-codex-provider switch openai
-codex-provider switch apigather
+codex-bridge switch openai
+codex-bridge switch apigather
 ```
 
 If you want a different automatic backup retention count for one run:
 
 ```bash
-codex-provider sync --keep 5
-codex-provider switch apigather --keep 10
+codex-bridge sync --keep 5
+codex-bridge switch apigather --keep 10
 ```
 
 Check current state first:
 
 ```bash
-codex-provider status
+codex-bridge status
 ```
 
 Install a Windows double-click launcher (placed on your Desktop by default):
 
 ```bash
-codex-provider install-windows-launcher
+codex-bridge install-windows-launcher
 ```
 
 Install a macOS `launchd` watcher that auto-syncs after provider changes:
 
 ```bash
-codex-provider install-macos-launch-agent
+codex-bridge install-macos-launch-agent
 ```
 
 Rollback from a backup:
 
 ```bash
-codex-provider restore C:\Users\you\.codex\backups_state\provider-sync\<timestamp>
+codex-bridge restore C:\Users\you\.codex\backups_state\provider-sync\<timestamp>
 ```
 
 Clean old managed backups manually:
 
 ```bash
-codex-provider prune-backups --keep 5
+codex-bridge prune-backups --keep 5
 ```
 
 ## AI Quick Run
@@ -123,20 +123,20 @@ codex-provider prune-backups --keep 5
 If you want an AI assistant to handle this in one shot, copy this prompt:
 
 ```text
-Help me fix Codex session visibility with codex-provider-sync.
+Help me fix Codex session visibility with codex-provider-bridge.
 
 Steps:
-1. Run `codex-provider status`.
-2. If my current provider is already correct, run `codex-provider sync`.
-3. If I explicitly want to switch provider, run `codex-provider switch <provider-id>` instead.
+1. Run `codex-bridge status`.
+2. If my current provider is already correct, run `codex-bridge sync`.
+3. If I explicitly want to switch provider, run `codex-bridge switch <provider-id>` instead.
 4. If `state_5.sqlite` is currently in use, tell me to close Codex / Codex App / app-server and retry.
-5. If sync skips locked rollout files, tell me which files were skipped and remind me to rerun `codex-provider sync` later.
+5. If sync skips locked rollout files, tell me which files were skipped and remind me to rerun `codex-bridge sync` later.
 6. Summarize the final provider counts in rollout files and SQLite.
 ```
 
 If the user prefers the GUI, the AI can instead guide these steps:
 
-1. Open `CodexProviderSync.exe`
+1. Open `CodexProviderBridge.exe`
 2. Confirm the `.codex` path
 3. Click `Refresh`
 4. Pick the target provider from the list
@@ -146,40 +146,40 @@ If the user prefers the GUI, the AI can instead guide these steps:
 
 Quick mapping:
 
-- inspect only: `codex-provider status`
-- fix visibility under current provider: `codex-provider sync`
-- switch provider and sync: `codex-provider switch openai`
-- install a desktop double-click launcher: `codex-provider install-windows-launcher`
-- install a macOS watcher that follows provider switches: `codex-provider install-macos-launch-agent`
-- roll back a mistake: `codex-provider restore <backup-dir>`
+- inspect only: `codex-bridge status`
+- fix visibility under current provider: `codex-bridge sync`
+- switch provider and sync: `codex-bridge switch openai`
+- install a desktop double-click launcher: `codex-bridge install-windows-launcher`
+- install a macOS watcher that follows provider switches: `codex-bridge install-macos-launch-agent`
+- roll back a mistake: `codex-bridge restore <backup-dir>`
 
 ## Commands
 
-- `codex-provider status`
+- `codex-bridge status`
   - shows current provider and provider distribution in rollout files and SQLite
-- `codex-provider sync`
+- `codex-bridge sync`
   - syncs history to the current provider
   - `--provider <id>` overrides the target provider
   - if root `model_provider` is missing, it falls back to `openai`
-- `codex-provider switch <provider-id>`
+- `codex-bridge switch <provider-id>`
   - updates root `model_provider` in `config.toml`
   - immediately runs a sync
   - `--keep <n>` overrides how many managed backups are retained after the run
-- `codex-provider prune-backups`
+- `codex-bridge prune-backups`
   - manually removes older managed backups and keeps the newest `n`
-- `codex-provider restore <backup-dir>`
+- `codex-bridge restore <backup-dir>`
   - restores a previous backup
   - use `--no-config`, `--no-db`, or `--no-sessions` to skip a restore target
-- `codex-provider install-windows-launcher`
+- `codex-bridge install-windows-launcher`
   - creates two files on the Desktop by default
-  - `Codex Provider Sync.vbs`: hidden double-click launcher with a result popup
-  - `Codex Provider Sync.cmd`: visible console version for troubleshooting
+  - `Codex Provider Bridge.vbs`: hidden double-click launcher with a result popup
+  - `Codex Provider Bridge.cmd`: visible console version for troubleshooting
   - use `--dir <path>` to choose another install directory
   - use `--codex-home <path>` to bake a fixed `CODEX_HOME` into the launcher
-- `codex-provider install-macos-launch-agent`
+- `codex-bridge install-macos-launch-agent`
   - creates a `launchd` plist and an auto-sync shell script
   - watches `~/.codex/config.toml` for root `model_provider` changes
-  - when the provider changes, runs `codex-provider sync --provider <current-provider>`
+  - when the provider changes, runs `codex-bridge sync --provider <current-provider>`
   - use `--launch-agents-dir <path>` and `--support-dir <path>` to change output paths
   - use `--node-path <path>` or `--cli-path <path>` when you want to pin a specific runtime or script location
 
@@ -191,25 +191,25 @@ That means:
 
 - after syncing to a third-party provider, history becomes visible under that provider
 - after switching back to `openai`, history may disappear there until you sync to `openai` again
-- if you want that flip to happen automatically on macOS, install `codex-provider install-macos-launch-agent`
+- if you want that flip to happen automatically on macOS, install `codex-bridge install-macos-launch-agent`
 
 ```bash
-codex-provider status
-codex-provider sync
-codex-provider sync --keep 5
-codex-provider sync --provider openai
-codex-provider switch openai
-codex-provider switch apigather
-codex-provider prune-backups --keep 5
-codex-provider install-windows-launcher
-codex-provider install-macos-launch-agent
-codex-provider install-windows-launcher --dir D:\Tools
-codex-provider install-windows-launcher --codex-home C:\Users\you\.codex
-codex-provider restore C:\Users\you\.codex\backups_state\provider-sync\20260319T042708906Z
-codex-provider status --codex-home C:\Users\you\.codex
-codex-provider sync --codex-home C:\Users\you\.codex
-codex-provider switch apigather --codex-home C:\Users\you\.codex
-codex-provider restore C:\Users\you\.codex\backups_state\provider-sync\20260319T042708906Z
+codex-bridge status
+codex-bridge sync
+codex-bridge sync --keep 5
+codex-bridge sync --provider openai
+codex-bridge switch openai
+codex-bridge switch apigather
+codex-bridge prune-backups --keep 5
+codex-bridge install-windows-launcher
+codex-bridge install-macos-launch-agent
+codex-bridge install-windows-launcher --dir D:\Tools
+codex-bridge install-windows-launcher --codex-home C:\Users\you\.codex
+codex-bridge restore C:\Users\you\.codex\backups_state\provider-sync\20260319T042708906Z
+codex-bridge status --codex-home C:\Users\you\.codex
+codex-bridge sync --codex-home C:\Users\you\.codex
+codex-bridge switch apigather --codex-home C:\Users\you\.codex
+codex-bridge restore C:\Users\you\.codex\backups_state\provider-sync\20260319T042708906Z
 ```
 
 ## Safety
@@ -231,7 +231,7 @@ It also uses:
 - It does not rewrite message history, titles, cwd, or timestamps.
 - It keeps the newest 5 managed backups by default; GUI retention settings or CLI `--keep <n>` can override that.
 - Manual cleanup and auto-prune only touch backups created by this tool inside `backups_state/provider-sync`.
-- `Codex Provider Sync.vbs` assumes the `codex-provider` command is already available.
+- `Codex Provider Bridge.vbs` assumes the `codex-bridge` command is already available.
 - The macOS launch agent only automates metadata sync after provider switches; it does not manage auth state or third-party switch tools.
 - If `state_5.sqlite` is in use, close Codex / Codex App / app-server and retry.
 - If `state_5.sqlite` is malformed, the tool reports it as malformed/unreadable and blocks sync; back up, repair, or remove the damaged database before retrying.
@@ -240,10 +240,10 @@ It also uses:
 
 ## EXE double-click troubleshooting
 
-1. Fully extract the release archive before running `CodexProviderSync.exe`.
-2. If no window appears, open PowerShell in the EXE directory and run `./CodexProviderSync.exe`.
+1. Fully extract the release archive before running `CodexProviderBridge.exe`.
+2. If no window appears, open PowerShell in the EXE directory and run `./CodexProviderBridge.exe`.
 3. Check Windows SmartScreen, Defender, or third-party antivirus blocks.
-4. Check `%AppData%\codex-provider-sync\startup-error.log`; startup exceptions are written there.
+4. Check `%AppData%\codex-provider-bridge\startup-error.log`; startup exceptions are written there.
 
 ## For AI Agents
 
@@ -252,8 +252,8 @@ For a fuller machine-oriented version, see [AGENTS.md](../AGENTS.md).
 ## Development
 
 ```bash
-git clone https://github.com/wasd-lvlong/codex-provider-sync.git
-cd codex-provider-sync
+git clone https://github.com/wasd-lvlong/codex-provider-bridge.git
+cd codex-provider-bridge
 npm test
 dotnet test desktop/CodexProviderSync.Core.Tests/CodexProviderSync.Core.Tests.csproj
 pwsh ./scripts/publish-gui.ps1

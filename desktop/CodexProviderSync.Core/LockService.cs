@@ -10,7 +10,7 @@ public sealed class LockService
     private const int DefaultLockCreateRetryCount = 3;
     private const int DefaultLockCreateRetryDelayMs = 75;
 
-    public async Task<LockHandle> AcquireLockAsync(string codexHome, string label = "codex-provider-sync")
+    public async Task<LockHandle> AcquireLockAsync(string codexHome, string label = "codex-provider-bridge")
     {
         string lockPath = AppConstants.LockPath(codexHome);
         Directory.CreateDirectory(Path.GetDirectoryName(lockPath)!);

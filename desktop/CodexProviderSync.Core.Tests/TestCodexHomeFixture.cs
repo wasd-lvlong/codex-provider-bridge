@@ -17,7 +17,7 @@ internal sealed class TestCodexHomeFixture
 
     public static async Task<TestCodexHomeFixture> CreateAsync()
     {
-        string root = Path.Combine(Path.GetTempPath(), $"codex-provider-sync-{Guid.NewGuid():N}");
+        string root = Path.Combine(Path.GetTempPath(), $"codex-provider-bridge-{Guid.NewGuid():N}");
         string codexHome = Path.Combine(root, ".codex");
         Directory.CreateDirectory(Path.Combine(codexHome, "sessions", "2026", "03", "19"));
         Directory.CreateDirectory(Path.Combine(codexHome, "archived_sessions", "2026", "03", "18"));

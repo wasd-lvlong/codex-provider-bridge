@@ -182,16 +182,16 @@ public sealed class CoreIntegrationTests
         {
             ["electron-saved-workspace-roots"] = new[]
             {
-                @"\\?\D:\GitHubProject\codex-provider-sync"
+                @"\\?\D:\GitHubProject\codex-provider-bridge"
             },
             ["project-order"] = new[]
             {
-                @"\\?\D:\GitHubProject\codex-provider-sync",
+                @"\\?\D:\GitHubProject\codex-provider-bridge",
                 @"\\?\E:\NewRich\BrainLife\Code\BrainLife\Assets"
             },
             ["active-workspace-roots"] = new[]
             {
-                @"\\?\D:\GitHubProject\codex-provider-sync"
+                @"\\?\D:\GitHubProject\codex-provider-bridge"
             },
             ["electron-workspace-root-labels"] = new Dictionary<string, string>
             {
@@ -200,7 +200,7 @@ public sealed class CoreIntegrationTests
         });
         await fixture.WriteStateDbWithCwdAsync(
         [
-            ("thread-a", "openai", false, @"\\?\D:\GitHubProject\codex-provider-sync"),
+            ("thread-a", "openai", false, @"\\?\D:\GitHubProject\codex-provider-bridge"),
             ("thread-b", "openai", false, @"\\?\E:\NewRich\BrainLife\Code\BrainLife\Assets")
         ]);
 
@@ -213,18 +213,18 @@ public sealed class CoreIntegrationTests
             await File.ReadAllTextAsync(Path.Combine(fixture.CodexHome, AppConstants.GlobalStateFileBasename)));
         Assert.Equal(
         [
-            @"D:\GitHubProject\codex-provider-sync",
+            @"D:\GitHubProject\codex-provider-bridge",
             @"E:\NewRich\BrainLife\Code\BrainLife\Assets"
         ],
             syncedState.RootElement.GetProperty("electron-saved-workspace-roots").EnumerateArray().Select(static entry => entry.GetString()!).ToArray());
         Assert.Equal(
         [
-            @"D:\GitHubProject\codex-provider-sync",
+            @"D:\GitHubProject\codex-provider-bridge",
             @"E:\NewRich\BrainLife\Code\BrainLife\Assets"
         ],
             syncedState.RootElement.GetProperty("project-order").EnumerateArray().Select(static entry => entry.GetString()!).ToArray());
         Assert.Equal(
-            @"D:\GitHubProject\codex-provider-sync",
+            @"D:\GitHubProject\codex-provider-bridge",
             syncedState.RootElement.GetProperty("active-workspace-roots")[0].GetString());
         Assert.Equal(
             "BrainLifeAssets",
@@ -238,12 +238,12 @@ public sealed class CoreIntegrationTests
             await File.ReadAllTextAsync(Path.Combine(fixture.CodexHome, AppConstants.GlobalStateFileBasename)));
         Assert.Equal(
         [
-            @"\\?\D:\GitHubProject\codex-provider-sync"
+            @"\\?\D:\GitHubProject\codex-provider-bridge"
         ],
             restoredState.RootElement.GetProperty("electron-saved-workspace-roots").EnumerateArray().Select(static entry => entry.GetString()!).ToArray());
         Assert.Equal(
         [
-            @"\\?\D:\GitHubProject\codex-provider-sync",
+            @"\\?\D:\GitHubProject\codex-provider-bridge",
             @"\\?\E:\NewRich\BrainLife\Code\BrainLife\Assets"
         ],
             restoredState.RootElement.GetProperty("project-order").EnumerateArray().Select(static entry => entry.GetString()!).ToArray());

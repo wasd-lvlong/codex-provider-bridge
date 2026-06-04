@@ -14,13 +14,13 @@ static class Program
         {
             string logDir = Path.Combine(
                 Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
-                "codex-provider-sync");
+                "codex-provider-bridge");
             Directory.CreateDirectory(logDir);
             string logPath = Path.Combine(logDir, "startup-error.log");
             File.WriteAllText(logPath, error.ToString());
             MessageBox.Show(
-                $"Codex Provider Sync failed to start.\n\n{error.Message}\n\nDetails were written to:\n{logPath}",
-                "Codex Provider Sync",
+                $"Codex Provider Bridge failed to start.\n\n{error.Message}\n\nDetails were written to:\n{logPath}",
+                "Codex Provider Bridge",
                 MessageBoxButtons.OK,
                 MessageBoxIcon.Error);
         }

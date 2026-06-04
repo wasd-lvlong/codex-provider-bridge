@@ -7,9 +7,9 @@ export function getUnsupportedNodeVersionMessage(nodeVersion = process.versions.
   }
 
   const displayVersion = String(nodeVersion).startsWith("v") ? String(nodeVersion) : `v${nodeVersion}`;
-  return `codex-provider-sync requires Node.js ${MINIMUM_NODE_MAJOR_VERSION}+ because it uses node:sqlite. `
+  return `codex-provider-bridge requires Node.js ${MINIMUM_NODE_MAJOR_VERSION}+ because it uses node:sqlite. `
     + `Current Node.js version: ${displayVersion}. `
-    + "Please upgrade Node.js, then reinstall or rerun codex-provider.";
+    + "Please upgrade Node.js, then reinstall or rerun codex-bridge.";
 }
 
 export function assertSupportedNodeVersion() {

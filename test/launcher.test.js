@@ -15,7 +15,7 @@ import {
 } from "../src/launcher.js";
 
 test("installWindowsLauncher creates cmd and vbs launchers", async () => {
-  const dir = await fs.mkdtemp(path.join(os.tmpdir(), "codex-provider-launcher-"));
+  const dir = await fs.mkdtemp(path.join(os.tmpdir(), "codex-provider-bridge-launcher-"));
   const codexHome = "C:\\Users\\Example User\\.codex";
 
   const result = await installWindowsLauncher({ dir, codexHome });
@@ -28,19 +28,19 @@ test("installWindowsLauncher creates cmd and vbs launchers", async () => {
   const cmdText = await fs.readFile(result.cmdPath, "utf8");
   const vbsText = await fs.readFile(result.vbsPath, "utf8");
 
-  assert.match(cmdText, /codex-provider sync --codex-home "C:\\Users\\Example User\\.codex"/);
+  assert.match(cmdText, /codex-bridge sync --codex-home "C:\\Users\\Example User\\.codex"/);
   assert.match(vbsText, /Synchronization finished\./);
-  assert.match(vbsText, /Codex Provider Sync/);
-  assert.match(vbsText, /codex-provider sync --codex-home ""C:\\Users\\Example User\\.codex""/);
+  assert.match(vbsText, /Codex Provider Bridge/);
+  assert.match(vbsText, /codex-bridge sync --codex-home ""C:\\Users\\Example User\\.codex""/);
 });
 
 test("installMacosLaunchAgent creates a watcher script and plist", async () => {
-  const root = await fs.mkdtemp(path.join(os.tmpdir(), "codex-provider-macos-launcher-"));
+  const root = await fs.mkdtemp(path.join(os.tmpdir(), "codex-provider-bridge-macos-launcher-"));
   const codexHome = path.join(root, ".codex home");
   const supportDir = path.join(root, "support");
   const launchAgentsDir = path.join(root, "LaunchAgents");
   const nodePath = "/Applications/Codex.app/Contents/Resources/node";
-  const cliPath = "/tmp/codex-provider-sync/src/cli.js";
+  const cliPath = "/tmp/codex-provider-bridge/src/cli.js";
 
   const result = await installMacosLaunchAgent({
     codexHome,
@@ -62,13 +62,13 @@ test("installMacosLaunchAgent creates a watcher script and plist", async () => {
 
   assert.match(scriptText, /sync --provider "\$provider" --codex-home "\$CODEX_HOME"/);
   assert.match(scriptText, /skip: provider unchanged/);
-  assert.match(scriptText, /provider-sync-auto\.log/);
+  assert.match(scriptText, /provider-bridge-auto\.log/);
   assert.match(scriptText, /\/Applications\/Codex\.app\/Contents\/Resources\/node/);
-  assert.match(scriptText, /\/tmp\/codex-provider-sync\/src\/cli\.js/);
+  assert.match(scriptText, /\/tmp\/codex-provider-bridge\/src\/cli\.js/);
 
-  assert.match(plistText, /<string>com\.codex-provider-sync\.auto<\/string>/);
+  assert.match(plistText, /<string>com\.codex-provider-bridge\.auto<\/string>/);
   assert.match(plistText, /<key>WatchPaths<\/key>/);
   assert.match(plistText, /\.codex home\/config\.toml/);
-  assert.match(plistText, /provider-sync-auto\.launchd\.out\.log/);
-  assert.match(plistText, /provider-sync-auto\.launchd\.err\.log/);
+  assert.match(plistText, /provider-bridge-auto\.launchd\.out\.log/);
+  assert.match(plistText, /provider-bridge-auto\.launchd\.err\.log/);
 });

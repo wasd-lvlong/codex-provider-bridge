@@ -10,8 +10,8 @@
     <Nullable>enable</Nullable>
     <UseWindowsForms>true</UseWindowsForms>
     <ImplicitUsings>enable</ImplicitUsings>
-    <AssemblyName>CodexProviderSync</AssemblyName>
-    <Product>Codex Provider Sync</Product>
+    <AssemblyName>CodexProviderBridge</AssemblyName>
+    <Product>Codex Provider Bridge</Product>
     <Company>wasd-lvlong</Company>
     <Version>0.2.5</Version>
     <AssemblyVersion>0.2.5.0</AssemblyVersion>

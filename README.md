@@ -1,11 +1,11 @@
 <div align="center">
 
-# codex-provider-sync
+# codex-provider-bridge
 
 ### 切换 provider 后，让 Codex 历史会话重新可见
 
-[![CI](https://github.com/wasd-lvlong/codex-provider-sync/actions/workflows/ci.yml/badge.svg)](https://github.com/wasd-lvlong/codex-provider-sync/actions/workflows/ci.yml)
-[![Platform](https://img.shields.io/badge/platform-Windows%20%7C%20macOS-lightgrey.svg)](https://github.com/wasd-lvlong/codex-provider-sync)
+[![CI](https://github.com/wasd-lvlong/codex-provider-bridge/actions/workflows/ci.yml/badge.svg)](https://github.com/wasd-lvlong/codex-provider-bridge/actions/workflows/ci.yml)
+[![Platform](https://img.shields.io/badge/platform-Windows%20%7C%20macOS-lightgrey.svg)](https://github.com/wasd-lvlong/codex-provider-bridge)
 [![Node](https://img.shields.io/badge/node-24%2B-brightgreen.svg)](https://nodejs.org/)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
@@ -26,9 +26,9 @@ Codex 切换 `model_provider` 后，旧会话可能在 Desktop 或 `/resume` 里
 
 ## 快速使用
 
-Windows 用户优先下载 Release 里的 `CodexProviderSync.exe`：
+Windows 用户优先下载 Release 里的 `CodexProviderBridge.exe`：
 
-1. 打开 `CodexProviderSync.exe`
+1. 打开 `CodexProviderBridge.exe`
 2. 点击 `Refresh`
 3. 选择目标 Provider
 4. 点击 `Execute`
@@ -36,8 +36,8 @@ Windows 用户优先下载 Release 里的 `CodexProviderSync.exe`：
 macOS 等环境使用 CLI：
 
 ```bash
-npm install -g git+https://github.com/wasd-lvlong/codex-provider-sync.git
-codex-provider sync
+npm install -g git+https://github.com/wasd-lvlong/codex-provider-bridge.git
+codex-bridge sync
 ```
 
 CLI 需要 Node.js `24+`。如果使用 Node 20/22，可能会看到 `node:sqlite` 不存在的错误。
@@ -45,13 +45,13 @@ CLI 需要 Node.js `24+`。如果使用 Node 20/22，可能会看到 `node:sqlit
 更多 CLI 常用命令：
 
 ```bash
-codex-provider status
-codex-provider sync
-codex-provider sync --provider openai
-codex-provider switch apigather
-codex-provider install-macos-launch-agent
-codex-provider restore C:\Users\you\.codex\backups_state\provider-sync\<timestamp>
-codex-provider prune-backups --keep 5
+codex-bridge status
+codex-bridge sync
+codex-bridge sync --provider openai
+codex-bridge switch apigather
+codex-bridge install-macos-launch-agent
+codex-bridge restore C:\Users\you\.codex\backups_state\provider-sync\<timestamp>
+codex-bridge prune-backups --keep 5
 ```
 
 命令含义：
@@ -74,13 +74,13 @@ codex-provider prune-backups --keep 5
 - 如果你想在切换 provider 时自动翻转历史可见性，macOS 可以安装：
 
 ```bash
-codex-provider install-macos-launch-agent
+codex-bridge install-macos-launch-agent
 ```
 
 它会监听 `~/.codex/config.toml` 里的根 `model_provider`，一旦切换就自动执行一次：
 
 ```bash
-codex-provider sync --provider <current-provider>
+codex-bridge sync --provider <current-provider>
 ```
 
 ## 能力边界
@@ -101,7 +101,7 @@ codex-provider sync --provider <current-provider>
 
 - CLI `/resume` 能看到的旧会话，Desktop 项目侧可能仍显示“暂无对话”。
 - 旧项目会话如果排在全局最近 50 条之后，Desktop 首屏可能不会展示。
-- `codex-provider-sync status` / GUI Refresh 会显示 `first page 0/50`、`ranks 64-77` 这类诊断，帮助判断是不是这个问题。
+- `codex-provider-bridge status` / GUI Refresh 会显示 `first page 0/50`、`ranks 64-77` 这类诊断，帮助判断是不是这个问题。
 
 本工具不会通过修改 `updated_at` 或文件时间把旧会话强行挤进前 50。这个问题应由 Codex Desktop 上游改成按项目分页加载，或提高/开放首屏加载数量。
 
@@ -119,15 +119,15 @@ codex-provider sync --provider <current-provider>
 - 如果 `state_5.sqlite` 损坏，工具会提示 malformed/unreadable 并停止同步。
 - 如果活跃会话锁住 rollout 文件，工具会跳过该文件并继续处理其它历史会话。
 - macOS 自动监听器只负责“切换后自动同步历史 metadata”，不负责 provider 登录、认证保活或第三方切换工具本身。
-- 如果 EXE 双击无反应，先确认已解压，再查看 `%AppData%\codex-provider-sync\startup-error.log`，或在 PowerShell 里运行 `./CodexProviderSync.exe`。
+- 如果 EXE 双击无反应，先确认已解压，再查看 `%AppData%\codex-provider-bridge\startup-error.log`，或在 PowerShell 里运行 `./CodexProviderBridge.exe`。
 
 GUI 说明见 [README_GUI_ZH.md](docs/README_GUI_ZH.md)。AI / Agent 说明见 [AGENTS.md](AGENTS.md)。
 
 ## 开发
 
 ```bash
-git clone https://github.com/wasd-lvlong/codex-provider-sync.git
-cd codex-provider-sync
+git clone https://github.com/wasd-lvlong/codex-provider-bridge.git
+cd codex-provider-bridge
 npm test
 dotnet test desktop/CodexProviderSync.Core.Tests/CodexProviderSync.Core.Tests.csproj
 pwsh ./scripts/publish-gui.ps1

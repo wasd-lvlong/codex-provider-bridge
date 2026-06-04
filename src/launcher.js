@@ -3,18 +3,18 @@ import os from "node:os";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
-export const WINDOWS_CMD_LAUNCHER_FILENAME = "Codex Provider Sync.cmd";
-export const WINDOWS_VBS_LAUNCHER_FILENAME = "Codex Provider Sync.vbs";
-export const MACOS_LAUNCH_AGENT_LABEL = "com.codex-provider-sync.auto";
+export const WINDOWS_CMD_LAUNCHER_FILENAME = "Codex Provider Bridge.cmd";
+export const WINDOWS_VBS_LAUNCHER_FILENAME = "Codex Provider Bridge.vbs";
+export const MACOS_LAUNCH_AGENT_LABEL = "com.codex-provider-bridge.auto";
 export const MACOS_LAUNCH_AGENT_PLIST_FILENAME = `${MACOS_LAUNCH_AGENT_LABEL}.plist`;
-export const MACOS_AUTO_SYNC_SCRIPT_FILENAME = "codex-provider-sync-auto.sh";
+export const MACOS_AUTO_SYNC_SCRIPT_FILENAME = "codex-provider-bridge-auto.sh";
 
 function resolveLauncherDirectory(explicitDir) {
   return path.resolve(explicitDir ?? path.join(os.homedir(), "Desktop"));
 }
 
 function resolveMacosSupportDirectory(explicitDir) {
-  return path.resolve(explicitDir ?? path.join(os.homedir(), "Library", "Application Support", "codex-provider-sync"));
+  return path.resolve(explicitDir ?? path.join(os.homedir(), "Library", "Application Support", "codex-provider-bridge"));
 }
 
 function resolveMacosLaunchAgentsDirectory(explicitDir) {
@@ -44,7 +44,7 @@ function escapeForXml(value) {
 
 function buildBatchScript({ codexHome }) {
   const command = [
-    "codex-provider",
+    "codex-bridge",
     "sync",
     ...(codexHome ? ["--codex-home", quoteForBatch(codexHome)] : [])
   ].join(" ");
@@ -59,7 +59,7 @@ function buildBatchScript({ codexHome }) {
 
 function buildVbsScript({ codexHome }) {
   const syncCommand = [
-    "codex-provider",
+    "codex-bridge",
     "sync",
     ...(codexHome ? [`--codex-home ""${quoteForVbs(codexHome)}""`] : [])
   ].join(" ");
@@ -67,7 +67,7 @@ function buildVbsScript({ codexHome }) {
   return [
     "Option Explicit",
     "",
-    'Const TITLE = "Codex Provider Sync"',
+    'Const TITLE = "Codex Provider Bridge"',
     "Const MAX_OUTPUT = 3000",
     "",
     "Function TruncateOutput(value)",
@@ -128,7 +128,7 @@ function buildMacosAutoSyncScript({
     "",
     `CODEX_HOME=${quoteForPosix(codexHome)}`,
     'CONFIG_PATH="$CODEX_HOME/config.toml"',
-    'STATE_DIR="$CODEX_HOME/tmp/provider-sync-auto"',
+    'STATE_DIR="$CODEX_HOME/tmp/provider-bridge-auto"',
     'LOCK_DIR="$STATE_DIR/lock"',
     'LAST_PROVIDER_FILE="$STATE_DIR/last-provider"',
     `LOG_FILE=${quoteForPosix(logPath)}`,
@@ -278,8 +278,8 @@ export async function installMacosLaunchAgent({
   const scriptPath = path.join(resolvedSupportDir, MACOS_AUTO_SYNC_SCRIPT_FILENAME);
   const plistPath = path.join(resolvedLaunchAgentsDir, `${label}.plist`);
   const logDir = path.join(resolvedCodexHome, "log");
-  const stdoutPath = path.join(logDir, "provider-sync-auto.launchd.out.log");
-  const stderrPath = path.join(logDir, "provider-sync-auto.launchd.err.log");
+  const stdoutPath = path.join(logDir, "provider-bridge-auto.launchd.out.log");
+  const stderrPath = path.join(logDir, "provider-bridge-auto.launchd.err.log");
 
   await fs.mkdir(resolvedSupportDir, { recursive: true });
   await fs.mkdir(resolvedLaunchAgentsDir, { recursive: true });
@@ -289,7 +289,7 @@ export async function installMacosLaunchAgent({
     codexHome: resolvedCodexHome,
     nodePath: path.resolve(nodePath),
     cliPath: path.resolve(cliPath),
-    logPath: path.join(logDir, "provider-sync-auto.log")
+    logPath: path.join(logDir, "provider-bridge-auto.log")
   }), "utf8");
   await fs.chmod(scriptPath, 0o755);
 

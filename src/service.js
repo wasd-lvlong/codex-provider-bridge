@@ -395,7 +395,7 @@ export async function runSwitch({
   onProgress
 }) {
   if (!provider) {
-    throw new Error("Missing provider id. Usage: codex-provider switch <provider-id>");
+    throw new Error("Missing provider id. Usage: codex-bridge switch <provider-id>");
   }
 
   const codexHome = normalizeCodexHome(explicitCodexHome);
@@ -445,7 +445,7 @@ export async function runRestore({
   restoreSessions = true
 }) {
   if (!backupDir) {
-    throw new Error("Missing backup path. Usage: codex-provider restore <backup-dir>");
+    throw new Error("Missing backup path. Usage: codex-bridge restore <backup-dir>");
   }
   const codexHome = normalizeCodexHome(explicitCodexHome);
   await ensureCodexHome(codexHome);

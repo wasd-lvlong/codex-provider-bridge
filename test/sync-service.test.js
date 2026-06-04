@@ -19,7 +19,7 @@ import { getUnsupportedNodeVersionMessage } from "../src/node-version.js";
 import { applySessionChanges, collectSessionChanges } from "../src/session-files.js";
 
 async function makeTempCodexHome() {
-  const root = await fs.mkdtemp(path.join(os.tmpdir(), "codex-provider-sync-"));
+  const root = await fs.mkdtemp(path.join(os.tmpdir(), "codex-provider-bridge-"));
   const codexHome = path.join(root, ".codex");
   await fs.mkdir(path.join(codexHome, "sessions", "2026", "03", "19"), { recursive: true });
   await fs.mkdir(path.join(codexHome, "archived_sessions", "2026", "03", "18"), { recursive: true });
@@ -443,14 +443,14 @@ test("runSync restores workspace roots from project order and normalizes them to
   await writeConfig(codexHome, 'model_provider = "openai"');
   const originalState = {
     "electron-saved-workspace-roots": [
-      "\\\\?\\D:\\GitHubProject\\codex-provider-sync"
+      "\\\\?\\D:\\GitHubProject\\codex-provider-bridge"
     ],
     "project-order": [
-      "\\\\?\\D:\\GitHubProject\\codex-provider-sync",
+      "\\\\?\\D:\\GitHubProject\\codex-provider-bridge",
       "\\\\?\\E:\\NewRich\\BrainLife\\Code\\BrainLife\\Assets"
     ],
     "active-workspace-roots": [
-      "\\\\?\\D:\\GitHubProject\\codex-provider-sync"
+      "\\\\?\\D:\\GitHubProject\\codex-provider-bridge"
     ],
     "electron-workspace-root-labels": {
       "\\\\?\\E:\\NewRich\\BrainLife\\Code\\BrainLife\\Assets": "BrainLifeAssets"
@@ -462,7 +462,7 @@ test("runSync restores workspace roots from project order and normalizes them to
       id: "thread-a",
       model_provider: "openai",
       archived: false,
-      cwd: "\\\\?\\D:\\GitHubProject\\codex-provider-sync"
+      cwd: "\\\\?\\D:\\GitHubProject\\codex-provider-bridge"
     },
     {
       id: "thread-b",
@@ -477,15 +477,15 @@ test("runSync restores workspace roots from project order and normalizes them to
 
   const syncedState = JSON.parse(await fs.readFile(path.join(codexHome, ".codex-global-state.json"), "utf8"));
   assert.deepEqual(syncedState["electron-saved-workspace-roots"], [
-    "D:\\GitHubProject\\codex-provider-sync",
+    "D:\\GitHubProject\\codex-provider-bridge",
     "E:\\NewRich\\BrainLife\\Code\\BrainLife\\Assets"
   ]);
   assert.deepEqual(syncedState["project-order"], [
-    "D:\\GitHubProject\\codex-provider-sync",
+    "D:\\GitHubProject\\codex-provider-bridge",
     "E:\\NewRich\\BrainLife\\Code\\BrainLife\\Assets"
   ]);
   assert.deepEqual(syncedState["active-workspace-roots"], [
-    "D:\\GitHubProject\\codex-provider-sync"
+    "D:\\GitHubProject\\codex-provider-bridge"
   ]);
   assert.equal(
     syncedState["electron-workspace-root-labels"]["E:\\NewRich\\BrainLife\\Code\\BrainLife\\Assets"],

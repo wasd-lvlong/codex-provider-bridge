@@ -29,7 +29,7 @@ public static class AppConstants
     {
         return Path.Combine(
             Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
-            "codex-provider-sync");
+            "codex-provider-bridge");
     }
 
     public static string SettingsPath()

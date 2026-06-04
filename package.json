@@ -1,16 +1,16 @@
 {
-  "name": "codex-provider-sync",
+  "name": "codex-provider-bridge",
   "version": "0.2.5",
-  "description": "Synchronize Codex session provider metadata across rollout files and SQLite state.",
+  "description": "Bridge Codex session history across model providers.",
   "type": "module",
   "author": "lvlong",
-  "homepage": "https://github.com/wasd-lvlong/codex-provider-sync#readme",
+  "homepage": "https://github.com/wasd-lvlong/codex-provider-bridge#readme",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/wasd-lvlong/codex-provider-sync.git"
+    "url": "git+https://github.com/wasd-lvlong/codex-provider-bridge.git"
   },
   "bugs": {
-    "url": "https://github.com/wasd-lvlong/codex-provider-sync/issues"
+    "url": "https://github.com/wasd-lvlong/codex-provider-bridge/issues"
   },
   "files": [
     "README.md",
@@ -19,6 +19,7 @@
     "src"
   ],
   "bin": {
+    "codex-bridge": "./src/cli.js",
     "codex-provider": "./src/cli.js"
   },
   "scripts": {

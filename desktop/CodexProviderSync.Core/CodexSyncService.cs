@@ -234,7 +234,7 @@ public sealed class CodexSyncService
     {
         if (string.IsNullOrWhiteSpace(provider))
         {
-            throw new InvalidOperationException("Missing provider id. Usage: codex-provider switch <provider-id>");
+            throw new InvalidOperationException("Missing provider id. Usage: codex-bridge switch <provider-id>");
         }
 
         string codexHome = _codexHomeService.NormalizeCodexHome(explicitCodexHome);
@@ -293,7 +293,7 @@ public sealed class CodexSyncService
     {
         if (string.IsNullOrWhiteSpace(backupDir))
         {
-            throw new InvalidOperationException("Missing backup path. Usage: codex-provider restore <backup-dir>");
+            throw new InvalidOperationException("Missing backup path. Usage: codex-bridge restore <backup-dir>");
         }
 
         string codexHome = _codexHomeService.NormalizeCodexHome(explicitCodexHome);

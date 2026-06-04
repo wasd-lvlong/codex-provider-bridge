@@ -99,7 +99,7 @@ public sealed class MainForm : Form
 
     public MainForm()
     {
-        Text = "Codex Provider Sync";
+        Text = "Codex Provider Bridge";
         MinimumSize = new Size(1180, 760);
         StartPosition = FormStartPosition.CenterScreen;
 

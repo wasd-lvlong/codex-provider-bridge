@@ -15,7 +15,7 @@ if (Test-Path $outputDir) {
         Remove-Item -Recurse -Force $outputDir
     }
     catch {
-        throw "Unable to clean publish output '$outputDir'. Close CodexProviderSync.exe if it is still running, or pass -Output to publish into a different directory."
+        throw "Unable to clean publish output '$outputDir'. Close CodexProviderBridge.exe if it is still running, or pass -Output to publish into a different directory."
     }
 }
 

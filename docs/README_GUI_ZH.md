@@ -1,10 +1,10 @@
-# Codex Provider Sync GUI
+# Codex Provider Bridge GUI
 
 ## 适用场景
 
 这是 Windows 用户可用的图形界面版本。
 
-如果你不想装 Node、不想打开 PowerShell，也不想记命令，直接下载发布页里的 `CodexProviderSync.exe` 双击运行即可。
+如果你不想装 Node、不想打开 PowerShell，也不想记命令，直接下载发布页里的 `CodexProviderBridge.exe` 双击运行即可。
 
 ## 它能做什么
 
@@ -18,7 +18,7 @@
 - 支持手动清理旧备份
 - 支持从 backup 目录恢复
 - 恢复时可分别选择 config、SQLite、rollout metadata
-- 如果 EXE 双击无反应，查看 `%AppData%\codex-provider-sync\startup-error.log`，或在 PowerShell 中运行 `./CodexProviderSync.exe` 获取错误
+- 如果 EXE 双击无反应，查看 `%AppData%\codex-provider-bridge\startup-error.log`，或在 PowerShell 中运行 `./CodexProviderBridge.exe` 获取错误
 - 含 `encrypted_content` 的历史会话跨 provider/account 后可能只能恢复可见性，继续对话或 compact 仍可能报 `invalid_encrypted_content`
 
 ## 能力边界
@@ -37,7 +37,7 @@ GUI Refresh 会显示项目可见性诊断，例如 `first page 0/50`、`ranks 6
 
 ## 使用方式
 
-1. 打开 `CodexProviderSync.exe`
+1. 打开 `CodexProviderBridge.exe`
 2. 确认顶部 `Codex Home` 路径
 3. 点击 `Refresh`
 4. 在中间列表里选择目标 Provider
@@ -49,7 +49,7 @@ GUI Refresh 会显示项目可见性诊断，例如 `first page 0/50`、`ranks 6
 
 ## 持久化位置
 
-- GUI 设置：`%AppData%\codex-provider-sync\settings.json`
+- GUI 设置：`%AppData%\codex-provider-bridge\settings.json`
 - 备份目录：`%USERPROFILE%\.codex\backups_state\provider-sync\`
 
 ## 注意事项

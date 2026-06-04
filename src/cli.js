@@ -12,16 +12,19 @@ async function loadService() {
 }
 
 function printHelp() {
-  console.log(`codex-provider
+  console.log(`codex-bridge
 
 Usage:
-  codex-provider status [--codex-home PATH]
-  codex-provider sync [--provider ID] [--keep N] [--codex-home PATH]
-  codex-provider switch <provider-id> [--keep N] [--codex-home PATH]
-  codex-provider prune-backups [--keep N] [--codex-home PATH]
-  codex-provider restore <backup-dir> [--no-config] [--no-db] [--no-sessions] [--codex-home PATH]
-  codex-provider install-windows-launcher [--dir PATH] [--codex-home PATH]
-  codex-provider install-macos-launch-agent [--launch-agents-dir PATH] [--support-dir PATH] [--label NAME] [--node-path PATH] [--cli-path PATH] [--codex-home PATH]
+  codex-bridge status [--codex-home PATH]
+  codex-bridge sync [--provider ID] [--keep N] [--codex-home PATH]
+  codex-bridge switch <provider-id> [--keep N] [--codex-home PATH]
+  codex-bridge prune-backups [--keep N] [--codex-home PATH]
+  codex-bridge restore <backup-dir> [--no-config] [--no-db] [--no-sessions] [--codex-home PATH]
+  codex-bridge install-windows-launcher [--dir PATH] [--codex-home PATH]
+  codex-bridge install-macos-launch-agent [--launch-agents-dir PATH] [--support-dir PATH] [--label NAME] [--node-path PATH] [--cli-path PATH] [--codex-home PATH]
+
+Legacy alias:
+  codex-provider <command> still works when installed from npm because it points to this same CLI.
 `);
 }
 

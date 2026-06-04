@@ -23,7 +23,7 @@ Do not solve this by manually editing rollout files only unless the user explici
 
 Use this order by default:
 
-1. If the GUI is available and the user is not asking for terminal commands, open `CodexProviderSync.exe`
+1. If the GUI is available and the user is not asking for terminal commands, open `CodexProviderBridge.exe`
 2. Refresh and inspect the current provider plus rollout/SQLite distribution
 3. Decide whether the user needs sync, switch-like behavior, or restore
 4. Execute the action
@@ -31,7 +31,7 @@ Use this order by default:
 
 CLI fallback flow:
 
-1. Run `codex-provider status`
+1. Run `codex-bridge status`
 2. Read `Current provider` and compare rollout/SQLite distribution
 3. Decide whether the user needs `sync`, `switch`, or `restore`
 4. Run the command
@@ -39,7 +39,7 @@ CLI fallback flow:
 
 ## Command Selection
 
-Use `codex-provider sync` when:
+Use `codex-bridge sync` when:
 
 - the user already switched auth/provider using another tool
 - the current `config.toml` root `model_provider` is already correct
@@ -48,17 +48,17 @@ Use `codex-provider sync` when:
   - "resync my Codex history"
   - "I already switched provider"
 
-Use `codex-provider switch <provider-id>` when:
+Use `codex-bridge switch <provider-id>` when:
 
 - the user wants to change the root `model_provider`
 - the user wants one command to both switch provider and resync history
 
-Use `codex-provider restore <backup-dir>` when:
+Use `codex-bridge restore <backup-dir>` when:
 
 - the user wants to roll back a previous sync
 - the user synced to the wrong provider
 
-Use `codex-provider status` only when:
+Use `codex-bridge status` only when:
 
 - the user asks for inspection only
 - you need a safe first step before deciding what to do
@@ -102,12 +102,12 @@ If sync reports `Skipped locked rollout files`:
 
 - treat the sync as mostly successful
 - explain that the active session still holds one or more rollout files open
-- tell the user to rerun `codex-provider sync` after that session ends if they want a full rewrite
+- tell the user to rerun `codex-bridge sync` after that session ends if they want a full rewrite
 
 If `switch <provider-id>` fails because the provider is missing:
 
 - tell the user to define it in `config.toml` or switch via their existing provider tool first
-- then run `codex-provider sync`
+- then run `codex-bridge sync`
 
 ## Safe Defaults
 
@@ -116,26 +116,26 @@ If `switch <provider-id>` fails because the provider is missing:
 - by default the tool keeps the most recent 5 managed backups
 - use GUI retention settings or CLI `--keep <n>` when the user wants a different retention count
 - do not edit `state_5.sqlite` or rollout files manually if the tool can do it
-- GUI settings live in `%AppData%\codex-provider-sync\settings.json`
+- GUI settings live in `%AppData%\codex-provider-bridge\settings.json`
 
 ## Recommended Commands
 
 ```bash
-codex-provider status
-codex-provider sync
-codex-provider sync --keep 5
-codex-provider sync --provider openai
-codex-provider switch apigather
-codex-provider prune-backups --keep 5
-codex-provider restore C:\Users\you\.codex\backups_state\provider-sync\20260319T042708906Z
+codex-bridge status
+codex-bridge sync
+codex-bridge sync --keep 5
+codex-bridge sync --provider openai
+codex-bridge switch apigather
+codex-bridge prune-backups --keep 5
+codex-bridge restore C:\Users\you\.codex\backups_state\provider-sync\20260319T042708906Z
 ```
 
 With an explicit Codex home:
 
 ```bash
-codex-provider status --codex-home C:\Users\you\.codex
-codex-provider sync --codex-home C:\Users\you\.codex
-codex-provider switch openai --codex-home C:\Users\you\.codex
+codex-bridge status --codex-home C:\Users\you\.codex
+codex-bridge sync --codex-home C:\Users\you\.codex
+codex-bridge switch openai --codex-home C:\Users\you\.codex
 ```
 
 ## One-Shot Prompt Template
@@ -143,12 +143,12 @@ codex-provider switch openai --codex-home C:\Users\you\.codex
 Use this prompt in another AI tool if the user wants one-step handling:
 
 ```text
-I use codex-provider-sync. Please help me fix Codex session visibility under my current provider.
+I use codex-provider-bridge. Please help me fix Codex session visibility under my current provider.
 
 Steps:
-1. Run `codex-provider status`.
-2. If my current provider is already correct, run `codex-provider sync`.
-3. If I explicitly tell you to switch provider, run `codex-provider switch <provider-id>` instead.
+1. Run `codex-bridge status`.
+2. If my current provider is already correct, run `codex-bridge sync`.
+3. If I explicitly tell you to switch provider, run `codex-bridge switch <provider-id>` instead.
 4. If SQLite is locked, tell me to close Codex / Codex App / app-server and retry.
 5. If rollout files are skipped because they are locked, tell me which ones were skipped and remind me to rerun sync later.
 6. Summarize the final state of rollout files and SQLite after the command finishes.
