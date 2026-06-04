@@ -4,11 +4,10 @@
 
 ### Keep Codex history visible after switching between providers
 
-[![CI](https://github.com/Dailin521/codex-provider-sync/actions/workflows/ci.yml/badge.svg)](https://github.com/Dailin521/codex-provider-sync/actions/workflows/ci.yml)
-[![Platform](https://img.shields.io/badge/platform-Windows%20%7C%20macOS-lightgrey.svg)](https://github.com/Dailin521/codex-provider-sync)
+[![CI](https://github.com/wasd-lvlong/codex-provider-sync/actions/workflows/ci.yml/badge.svg)](https://github.com/wasd-lvlong/codex-provider-sync/actions/workflows/ci.yml)
+[![Platform](https://img.shields.io/badge/platform-Windows%20%7C%20macOS-lightgrey.svg)](https://github.com/wasd-lvlong/codex-provider-sync)
 [![Node](https://img.shields.io/badge/node-24%2B-brightgreen.svg)](https://nodejs.org/)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](../LICENSE)
-[![Community](https://img.shields.io/badge/community-LINUX%20DO-2ea043.svg)](https://linux.do/)
 
 English | [中文](../README.md)
 
@@ -48,7 +47,7 @@ For GUI-specific usage notes, see [README_GUI_ZH.md](README_GUI_ZH.md).
 ## Install
 
 ```bash
-npm install -g git+https://github.com/Dailin521/codex-provider-sync.git
+npm install -g git+https://github.com/wasd-lvlong/codex-provider-sync.git
 ```
 
 Requirements:
@@ -253,7 +252,7 @@ For a fuller machine-oriented version, see [AGENTS.md](../AGENTS.md).
 ## Development
 
 ```bash
-git clone https://github.com/Dailin521/codex-provider-sync.git
+git clone https://github.com/wasd-lvlong/codex-provider-sync.git
 cd codex-provider-sync
 npm test
 dotnet test desktop/CodexProviderSync.Core.Tests/CodexProviderSync.Core.Tests.csproj

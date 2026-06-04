@@ -3,6 +3,15 @@
   "version": "0.2.5",
   "description": "Synchronize Codex session provider metadata across rollout files and SQLite state.",
   "type": "module",
+  "author": "lvlong",
+  "homepage": "https://github.com/wasd-lvlong/codex-provider-sync#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/wasd-lvlong/codex-provider-sync.git"
+  },
+  "bugs": {
+    "url": "https://github.com/wasd-lvlong/codex-provider-sync/issues"
+  },
   "files": [
     "README.md",
     "AGENTS.md",
