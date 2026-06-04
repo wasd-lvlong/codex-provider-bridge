@@ -69,7 +69,7 @@ codex-provider prune-backups --keep 5
 
 例如：
 
-- 你同步到 `oneapi` 后，会在 `oneapi` 下看到历史。
+- 你同步到某个第三方 provider 后，会在该 provider 下看到历史。
 - 之后切回官方订阅 `openai`，如果没有再同步到 `openai`，订阅侧可能就看不到这些历史。
 
 如果你的需求是“切换 provider 时自动把历史翻到当前 provider”，macOS 可以安装：

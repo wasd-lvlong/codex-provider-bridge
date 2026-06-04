@@ -190,7 +190,7 @@ This tool synchronizes history metadata to one target provider at a time. It doe
 
 That means:
 
-- after syncing to `oneapi`, history becomes visible under `oneapi`
+- after syncing to a third-party provider, history becomes visible under that provider
 - after switching back to `openai`, history may disappear there until you sync to `openai` again
 - if you want that flip to happen automatically on macOS, install `codex-provider install-macos-launch-agent`
 

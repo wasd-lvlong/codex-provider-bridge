@@ -69,7 +69,7 @@ codex-provider prune-backups --keep 5
 
 这意味着：
 
-- 同步到 `oneapi` 后，历史会显示在 `oneapi` 侧。
+- 同步到某个第三方 provider 后，历史会显示在该 provider 侧。
 - 之后如果切回 `openai` / 订阅侧，没有再次同步的话，订阅侧可能看不到这些历史。
 - 如果你想在切换 provider 时自动翻转历史可见性，macOS 可以安装：
 
