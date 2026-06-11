@@ -7,8 +7,10 @@ import path from "node:path";
 import {
   installMacosLaunchAgent,
   MACOS_AUTO_SYNC_SCRIPT_FILENAME,
+  MACOS_CODEX_NODE_CANDIDATES,
   MACOS_LAUNCH_AGENT_LABEL,
   MACOS_LAUNCH_AGENT_PLIST_FILENAME,
+  resolveMacosNodePath,
   installWindowsLauncher,
   WINDOWS_CMD_LAUNCHER_FILENAME,
   WINDOWS_VBS_LAUNCHER_FILENAME
@@ -71,4 +73,19 @@ test("installMacosLaunchAgent creates a watcher script and plist", async () => {
   assert.match(plistText, /\.codex home\/config\.toml/);
   assert.match(plistText, /provider-bridge-auto\.launchd\.out\.log/);
   assert.match(plistText, /provider-bridge-auto\.launchd\.err\.log/);
+});
+
+test("resolveMacosNodePath prefers bundled Codex Node when available", async () => {
+  const resolvedNodePath = await resolveMacosNodePath();
+  assert.ok(MACOS_CODEX_NODE_CANDIDATES.includes(resolvedNodePath) || resolvedNodePath === process.execPath);
+  if (await fs.access(MACOS_CODEX_NODE_CANDIDATES[0], fs.constants.X_OK).then(() => true, () => false)) {
+    assert.equal(resolvedNodePath, MACOS_CODEX_NODE_CANDIDATES[0]);
+  }
+});
+
+test("resolveMacosNodePath preserves explicit node path", async () => {
+  assert.equal(
+    await resolveMacosNodePath("/tmp/custom-node"),
+    path.resolve("/tmp/custom-node")
+  );
 });

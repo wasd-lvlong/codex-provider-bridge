@@ -276,6 +276,7 @@ async function main() {
     console.log(`  LaunchAgent plist: ${result.plistPath}`);
     console.log(`  Auto-sync script: ${result.scriptPath}`);
     console.log(`  Codex home: ${result.codexHome}`);
+    console.log(`  Node runtime: ${result.nodePath}`);
     console.log(`  Stdout log: ${result.stdoutPath}`);
     console.log(`  Stderr log: ${result.stderrPath}`);
     console.log("Next steps:");

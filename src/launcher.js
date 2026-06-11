@@ -8,6 +8,10 @@ export const WINDOWS_VBS_LAUNCHER_FILENAME = "Codex Provider Bridge.vbs";
 export const MACOS_LAUNCH_AGENT_LABEL = "com.codex-provider-bridge.auto";
 export const MACOS_LAUNCH_AGENT_PLIST_FILENAME = `${MACOS_LAUNCH_AGENT_LABEL}.plist`;
 export const MACOS_AUTO_SYNC_SCRIPT_FILENAME = "codex-provider-bridge-auto.sh";
+export const MACOS_CODEX_NODE_CANDIDATES = [
+  "/Applications/Codex.app/Contents/Resources/cua_node/bin/node",
+  "/Applications/Codex.app/Contents/Resources/node"
+];
 
 function resolveLauncherDirectory(explicitDir) {
   return path.resolve(explicitDir ?? path.join(os.homedir(), "Desktop"));
@@ -243,6 +247,29 @@ function buildMacosLaunchAgentPlist({
 `;
 }
 
+async function isExecutable(filePath) {
+  try {
+    await fs.access(filePath, fs.constants.X_OK);
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+export async function resolveMacosNodePath(explicitNodePath) {
+  if (explicitNodePath) {
+    return path.resolve(explicitNodePath);
+  }
+
+  for (const candidate of MACOS_CODEX_NODE_CANDIDATES) {
+    if (await isExecutable(candidate)) {
+      return candidate;
+    }
+  }
+
+  return process.execPath;
+}
+
 export async function installWindowsLauncher({
   dir,
   codexHome
@@ -269,7 +296,7 @@ export async function installMacosLaunchAgent({
   supportDir,
   codexHome,
   label = MACOS_LAUNCH_AGENT_LABEL,
-  nodePath = process.execPath,
+  nodePath,
   cliPath = fileURLToPath(new URL("./cli.js", import.meta.url))
 } = {}) {
   const resolvedCodexHome = path.resolve(codexHome ?? path.join(os.homedir(), ".codex"));
@@ -280,6 +307,7 @@ export async function installMacosLaunchAgent({
   const logDir = path.join(resolvedCodexHome, "log");
   const stdoutPath = path.join(logDir, "provider-bridge-auto.launchd.out.log");
   const stderrPath = path.join(logDir, "provider-bridge-auto.launchd.err.log");
+  const resolvedNodePath = await resolveMacosNodePath(nodePath);
 
   await fs.mkdir(resolvedSupportDir, { recursive: true });
   await fs.mkdir(resolvedLaunchAgentsDir, { recursive: true });
@@ -287,7 +315,7 @@ export async function installMacosLaunchAgent({
 
   await fs.writeFile(scriptPath, buildMacosAutoSyncScript({
     codexHome: resolvedCodexHome,
-    nodePath: path.resolve(nodePath),
+    nodePath: resolvedNodePath,
     cliPath: path.resolve(cliPath),
     logPath: path.join(logDir, "provider-bridge-auto.log")
   }), "utf8");
@@ -310,6 +338,7 @@ export async function installMacosLaunchAgent({
     plistPath,
     stdoutPath,
     stderrPath,
+    nodePath: resolvedNodePath,
     loadCommand: `launchctl bootstrap gui/$(id -u) ${quoteForPosix(plistPath)}`,
     unloadCommand: `launchctl bootout gui/$(id -u) ${quoteForPosix(plistPath)}`
   };
