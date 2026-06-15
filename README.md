@@ -83,6 +83,53 @@ codex-bridge install-macos-launch-agent
 codex-bridge sync --provider <current-provider>
 ```
 
+## macOS 自动同步服务
+
+安装服务：
+
+```bash
+codex-bridge install-macos-launch-agent
+```
+
+命令会生成：
+
+- `~/Library/LaunchAgents/com.codex-provider-bridge.auto.plist`
+- `~/Library/Application Support/codex-provider-bridge/codex-provider-bridge-auto.sh`
+- `~/.codex/log/provider-bridge-auto.log`
+
+首次启动：
+
+```bash
+launchctl bootstrap gui/$(id -u) ~/Library/LaunchAgents/com.codex-provider-bridge.auto.plist
+```
+
+修改脚本或重新安装后重载：
+
+```bash
+launchctl bootout gui/$(id -u) ~/Library/LaunchAgents/com.codex-provider-bridge.auto.plist
+launchctl bootstrap gui/$(id -u) ~/Library/LaunchAgents/com.codex-provider-bridge.auto.plist
+```
+
+手动触发一次同步：
+
+```bash
+launchctl kickstart -k gui/$(id -u)/com.codex-provider-bridge.auto
+```
+
+查看服务状态：
+
+```bash
+launchctl print gui/$(id -u)/com.codex-provider-bridge.auto
+```
+
+查看同步日志：
+
+```bash
+tail -n 50 ~/.codex/log/provider-bridge-auto.log
+```
+
+这个服务是 `WatchPaths` 监听器，不是常驻后台进程。`launchctl print` 里看到 `state = not running` 通常是正常的：它会在 `~/.codex/config.toml` 变化时唤醒，执行同步后退出。
+
 ## 能力边界
 
 本工具只修复“历史会话可见性”相关 metadata，不修改会话内容。
